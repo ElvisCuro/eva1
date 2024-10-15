@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitor de Sensor ESP32</title>
+    <script>
+        function actualizarDatos() {
+            fetch("/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "X-CSRFToken": getCookie("csrftoken") // Agrega el token CSRF aquí
+                },
+                body: new URLSearchParams({
+                    "valor": "valor_a_enviar", // Reemplaza con el valor real
+                    "voltaje": "voltaje_a_enviar", // Reemplaza con el voltaje real
+                    "voltaje_corregido": "voltaje_corregido_a_enviar" // Reemplaza con el voltaje corregido real
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error("Error en la conexión");
+            })
+            .then(data => {
+                console.log("Valor del sensor:", data.valor);
+                console.log("Voltaje:", data.voltaje);
+                console.log("Voltaje corregido:", data.voltaje_corregido);
+                // Actualiza los elementos del DOM con los nuevos datos
+                document.getElementById("valor").textContent = data.valor;
+                document.getElementById("voltaje").textContent = data.voltaje;
+                document.getElementById("voltaje_corregido").textContent = data.voltaje_corregido;
+            })
+            .catch(error => console.log("Error:", error));
+        }
+
+        // Función para obtener la cookie CSRF
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== "") {
+                const cookies = document.cookie.split(";");
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + "=")) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // Actualizar cada 2 segundos
+        setInterval(actualizarDatos, 2000);
+    </script>
+</head>
+<body>
+    <h1>Monitor de Sensor ESP32</h1>
+    <p><strong>Valor del sensor:</strong> <span id="valor">{{ valor }}</span></p>
+    <p><strong>Voltaje:</strong> <span id="voltaje">{{ voltaje }}</span> V</p>
+    <p><strong>Voltaje corregido:</strong> <span id="voltaje_corregido">{{ voltaje_corregido }}</span> V</p>
+</body>
+</html>
