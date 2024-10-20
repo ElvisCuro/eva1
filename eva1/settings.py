@@ -32,12 +32,14 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'eva1',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
 ]
 
 MIDDLEWARE = [
@@ -112,10 +114,8 @@ USE_I18N = True
 
 USE_TZ = True
 
-ALLOWED_HOSTS = ["192.168.2.101",
-                 "192.168.2.102",
-                 "192.168.2.103",
-                '*']
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '192.168.2.102']
+
 
 
 
